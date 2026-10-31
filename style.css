@@ -1,0 +1,14 @@
+body {
+    background-color: rgb(241, 228, 220);
+}
+
+canvas {
+    background-color: #ffffff;
+    
+    /* centre the canvas */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
