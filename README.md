@@ -3,6 +3,8 @@ An AI that plays the game on snake on a 8x8, 64 pixel grid. It uses reinforcemen
 
 One issue I faced was randomness, because of food spawning randomly, some snakes, who are worse at the game, accidentally walk into many foods and get higher fitness scores, even if there was a better snake available. I think that over many, thousands of generations, this will fix itself, but there might be a solution that I havent discovered yet. Keep this in mind when using the AI.
 
+PLEASE NOTE: the website takes a long time to load due to large amounts of JS, please wait for it to fully load, and then click start in order to see it go!
+
 <img width="617" height="616" alt="Screenshot 2026-11-02 132237" src="https://github.com/user-attachments/assets/4cc6cbb9-3234-45c2-a545-ed61f1d37e6e" />
 
 
