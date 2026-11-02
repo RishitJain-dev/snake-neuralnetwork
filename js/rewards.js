@@ -1,12 +1,12 @@
 const REWARDS = {
-    food: 100,
+    food: 1000,
     step: 0,
-    closerToFood: 1,
-    furtherFromFood: -2,
+    closerToFood: 0,
+    furtherFromFood: -0.5,
     hitWall: -50,
     hitSelf: -50,
-    starved: -50,
-    won: 1000
+    starved: -100,
+    won: 100000
 };
 
 function calculateFitness(stats) {

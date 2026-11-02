@@ -1,12 +1,12 @@
 class Population {
-    constructor(size = 100, inputSize = 71, hiddenSize = 16) {
+    constructor(size = 100, inputSize = 71, hiddenSize = 16, outputSize = 3) {
         this.size = size;
         this.generation = 1;
         this.mutationRate = 0.1;
         this.mutationAmount = 0.5;
         this.eliteCount = 4;
         this.parentCount = 10;
-        this.brains = Array.from({ length: size }, () => new NeuralNetwork(inputSize, hiddenSize, 4));
+        this.brains = Array.from({ length: size }, () => new NeuralNetwork(inputSize, hiddenSize, outputSize));
     }
 
     evolve(fitnesses) {

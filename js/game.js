@@ -1,3 +1,5 @@
+const USE_GRID_INPUTS = true;
+
 const DIRECTIONS = [
     { x: 0, y: -1 },
     { x: 0, y: 1 },
@@ -8,7 +10,7 @@ const DIRECTIONS = [
 class SnakeGame {
     constructor(size = 8) {
         this.size = size;
-        this.maxStepsWithoutFood = 100;
+        this.maxStepsWithoutFood = size * size;
         this.reset();
     }
 
@@ -50,9 +52,36 @@ class SnakeGame {
         return Math.abs(point.x - this.food.x) + Math.abs(point.y - this.food.y);
     }
 
+    inBounds(point) {
+        return point.x >= 0 && point.x < this.size && point.y >= 0 && point.y < this.size;
+    }
+
     isDanger(point) {
-        if (point.x < 0 || point.x >= this.size || point.y < 0 || point.y >= this.size) return true;
+        if (!this.inBounds(point)) return true;
         return this.snake.slice(0, -1).some(s => s.x === point.x && s.y === point.y);
+    }
+
+    reachableSpace(start) {
+        if (this.isDanger(start)) return 0;
+
+        const blocked = new Set(this.snake.slice(0, -1).map(s => s.y * this.size + s.x));
+        const seen = new Set([start.y * this.size + start.x]);
+        const queue = [start];
+
+        while (queue.length > 0) {
+            const p = queue.shift();
+            for (const d of DIRECTIONS) {
+                const n = { x: p.x + d.x, y: p.y + d.y };
+                const key = n.y * this.size + n.x;
+                if (this.inBounds(n) && !blocked.has(key) && !seen.has(key)) {
+                    seen.add(key);
+                    queue.push(n);
+                }
+            }
+        }
+
+        const freeCells = this.size * this.size - this.snake.length + 1;
+        return Math.min(seen.size / freeCells, 1);
     }
 
     setDirection(d) {
@@ -61,13 +90,19 @@ class SnakeGame {
         this.direction = next;
     }
 
+    turn(action) {
+        const d = this.direction;
+        if (action === 1) this.direction = { x: d.y, y: -d.x };
+        if (action === 2) this.direction = { x: -d.y, y: d.x };
+    }
+
     step() {
         if (!this.alive) return;
 
         const head = this.snake[0];
         const newHead = { x: head.x + this.direction.x, y: head.y + this.direction.y };
 
-        if (newHead.x < 0 || newHead.x >= this.size || newHead.y < 0 || newHead.y >= this.size) {
+        if (!this.inBounds(newHead)) {
             this.die("hitWall");
             return;
         }
@@ -104,27 +139,45 @@ class SnakeGame {
         }
     }
 
+    relativeSides(target) {
+        const head = this.snake[0];
+        const d = this.direction;
+        const dx = target.x - head.x;
+        const dy = target.y - head.y;
+        const ahead = dx * d.x + dy * d.y;
+        const left = dx * d.y - dy * d.x;
+        return [ahead > 0 ? 1 : 0, ahead < 0 ? 1 : 0, left > 0 ? 1 : 0, left < 0 ? 1 : 0];
+    }
+
     getInputs() {
-        const inputs = new Array(this.size * this.size).fill(0);
-        this.snake.forEach((s, i) => {
-            inputs[s.y * this.size + s.x] = i === 0 ? 0.5 : -1;
-        });
-        inputs[this.food.y * this.size + this.food.x] = 1;
+        const inputs = [];
+
+        if (USE_GRID_INPUTS) {
+            const grid = new Array(this.size * this.size).fill(0);
+            this.snake.forEach((s, i) => {
+                grid[s.y * this.size + s.x] = i === 0 ? 0.5 : -1;
+            });
+            grid[this.food.y * this.size + this.food.x] = 1;
+            inputs.push(...grid);
+        }
 
         const head = this.snake[0];
         const d = this.direction;
         const ahead = { x: head.x + d.x, y: head.y + d.y };
         const left = { x: head.x + d.y, y: head.y - d.x };
         const right = { x: head.x - d.y, y: head.y + d.x };
+        const tail = this.snake[this.snake.length - 1];
 
         inputs.push(
-            this.food.y < head.y ? 1 : 0,
-            this.food.y > head.y ? 1 : 0,
-            this.food.x < head.x ? 1 : 0,
-            this.food.x > head.x ? 1 : 0,
             this.isDanger(ahead) ? 1 : 0,
             this.isDanger(left) ? 1 : 0,
-            this.isDanger(right) ? 1 : 0
+            this.isDanger(right) ? 1 : 0,
+            ...this.relativeSides(this.food),
+            this.reachableSpace(ahead),
+            this.reachableSpace(left),
+            this.reachableSpace(right),
+            ...this.relativeSides(tail),
+            this.snake.length / (this.size * this.size)
         );
 
         return inputs;
