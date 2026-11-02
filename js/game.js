@@ -1,5 +1,3 @@
-const USE_GRID_INPUTS = true;
-
 const DIRECTIONS = [
     { x: 0, y: -1 },
     { x: 0, y: 1 },
@@ -134,7 +132,7 @@ class SnakeGame {
             }
         }
 
-        if (this.alive && this.stepsSinceFood > this.maxStepsWithoutFood) {
+        if (this.alive && this.stepsSinceFood > this.maxStepsWithoutFood + this.snake.length * 2) {
             this.die("starved");
         }
     }
@@ -152,14 +150,6 @@ class SnakeGame {
     getInputs() {
         const inputs = [];
 
-        if (USE_GRID_INPUTS) {
-            const grid = new Array(this.size * this.size).fill(0);
-            this.snake.forEach((s, i) => {
-                grid[s.y * this.size + s.x] = i === 0 ? 0.5 : -1;
-            });
-            grid[this.food.y * this.size + this.food.x] = 1;
-            inputs.push(...grid);
-        }
 
         const head = this.snake[0];
         const d = this.direction;
