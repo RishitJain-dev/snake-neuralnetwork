@@ -18,7 +18,24 @@
   font-style: italic;
 }
 
+#logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
 
+#logo {
+    height: 80px;
+    width: auto;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    transition: transform 0.2s ease;
+}
+
+#logo:hover {
+    transform: scale(1.05) rotate(-2deg);
+}
 
 body {
     background-color: rgb(241, 228, 220);
