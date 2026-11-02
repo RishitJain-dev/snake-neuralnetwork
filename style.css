@@ -29,7 +29,17 @@ body {
     margin: 20px;
 }
 
-canvas {
+#game {
+    background-color: #ffffff;
+}
+
+#boards {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+#brain {
     background-color: #ffffff;
 }
 

@@ -45,7 +45,7 @@ let aiBest = Number(localStorage.getItem(AI_BEST_KEY)) || 0;
 
 if (population.load(SAVE_KEY)) {
     bestScore = Number(localStorage.getItem(BEST_SCORE_KEY)) || 0;
-    console.log(`Loaded training from generation ${population.generation}`);
+    console.log(`loaded training from generation ${population.generation}`);
 }
 
 function saveTraining() {
@@ -122,7 +122,7 @@ function playLoop(id) {
     }
     playGame.step();
     render([playGame]);
-    messageEl.textContent = `Score: ${playGame.score}`;
+    messageEl.textContent = `score: ${playGame.score}`;
 
     if (!playGame.alive) {
         playActive = false;
@@ -131,7 +131,7 @@ function playLoop(id) {
             youBest = youLast;
             localStorage.setItem(YOU_BEST_KEY, youBest);
         }
-        messageEl.textContent = `Game over! You scored ${youLast}. Press an arrow key to play again.`;
+        messageEl.textContent = `oops! Game over! u scored ${youLast}. press an arrow key to play again.`;
         updateCompare();
         return;
     }
@@ -142,6 +142,7 @@ function playLoop(id) {
 function watchLoop(id) {
     if (id !== loopId || mode !== "watch") return;
 
+    drawBrain(population.brains[0], watchGame);
     playStep(watchGame, population.brains[0]);
     render([watchGame]);
     messageEl.textContent = `AI score: ${watchGame.score}`;
@@ -152,7 +153,7 @@ function watchLoop(id) {
             aiBest = aiLast;
             localStorage.setItem(AI_BEST_KEY, aiBest);
         }
-        messageEl.textContent = `The AI scored ${aiLast}. Press "Watch AI play" to watch again.`;
+        messageEl.textContent = `the AI scored ${aiLast}!!!! press "Watch AI play" to watch again!`;
         updateCompare();
         return;
     }
@@ -173,6 +174,7 @@ function setMode(newMode) {
     aiStatsEl.style.display = training ? "" : "none";
     aiControlsEl.style.display = training ? "" : "none";
     compareStatsEl.style.display = training ? "none" : "";
+    brainCanvas.style.display = mode === "watch" ? "" : "none";
     updateCompare();
 
     if (mode === "train") {
@@ -185,14 +187,14 @@ function setMode(newMode) {
         playGame = new SnakeGame(GRID);
         playGame.maxStepsWithoutFood = Infinity;
         render([playGame]);
-        messageEl.textContent = "Press an arrow key to start.";
+        messageEl.textContent = "press an arrow key to start!";
     }
 
     if (mode === "watch") {
         watchGame = new SnakeGame(GRID);
         render([watchGame]);
         if (population.generation === 1) {
-            messageEl.textContent = "The AI hasn't trained yet, so it will play randomly.";
+            messageEl.textContent = "ai hasnt been trained, this is random";
         }
         watchLoop(loopId);
     }

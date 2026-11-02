@@ -13,6 +13,8 @@ class Population {
         this.brains = Array.from({ length: size }, () => new NeuralNetwork(inputSize, hiddenSize, outputSize));
     }
 
+    /*alot of guide use in this, its almost entirelt the same tbh*/
+
     breed(parents, elites) {
         const next = elites.map(b => b.copy());
         while (next.length < this.size) {

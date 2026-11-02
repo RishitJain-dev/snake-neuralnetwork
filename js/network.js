@@ -28,15 +28,19 @@ class NeuralNetwork {
         });
     }
 
-    predict(inputs) {
+    think(inputs) {
         const hidden = NeuralNetwork.layer(inputs, this.weightsIH, this.biasH);
         const outputs = NeuralNetwork.layer(hidden, this.weightsHO, this.biasO);
 
-        let best = 0;
+        let choice = 0;
         for (let i = 1; i < outputs.length; i++) {
-            if (outputs[i] > outputs[best]) best = i;
+            if (outputs[i] > outputs[choice]) choice = i;
         }
-        return best;
+        return { inputs, hidden, outputs, choice };
+    }
+
+    predict(inputs) {
+        return this.think(inputs).choice;
     }
 
     copy() {
