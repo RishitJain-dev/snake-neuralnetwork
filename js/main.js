@@ -1,9 +1,12 @@
-const VISIBLE_SNAKES = 4;
-const OUTPUT_SIZE = 3;
 const POPULATION_SIZE = 200;
+const VISIBLE_SNAKES = 4;
 const HIDDEN_SIZE = 24;
+const OUTPUT_SIZE = 3;
 const GAMES_PER_BRAIN = 5;
 const INPUT_SIZE = new SnakeGame(GRID).getInputs().length;
+
+const SAVE_KEY = "snakeTraining";
+const BEST_SCORE_KEY = "snakeBestScore";
 
 const population = new Population(POPULATION_SIZE, INPUT_SIZE, HIDDEN_SIZE, OUTPUT_SIZE);
 let games = [];
@@ -16,6 +19,11 @@ const speedEl = document.getElementById("speed");
 
 let running = false;
 let bestScore = 0;
+
+if (population.load(SAVE_KEY)) {
+    bestScore = Number(localStorage.getItem(BEST_SCORE_KEY)) || 0;
+    console.log(`loaded training ${population.generation}`);
+}
 
 function playStep(game, brain) {
     game.turn(brain.predict(game.getInputs()));
@@ -61,6 +69,10 @@ function loop() {
         });
         const best = population.evolve(fitnesses);
         console.log(`Generation ${population.generation - 1} best fitness: ${best.toFixed(1)}`);
+
+        population.save(SAVE_KEY);
+        localStorage.setItem(BEST_SCORE_KEY, bestScore);
+
         startGeneration();
     }
 
@@ -78,6 +90,13 @@ document.getElementById("startBtn").onclick = () => {
 
 document.getElementById("pauseBtn").onclick = () => {
     running = false;
+};
+
+document.getElementById("resetBtn").onclick = () => {
+    if (!confirm("Delete all saved training and start again?")) return;
+    localStorage.removeItem(SAVE_KEY);
+    localStorage.removeItem(BEST_SCORE_KEY);
+    location.reload();
 };
 
 startGeneration();

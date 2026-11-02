@@ -63,6 +63,13 @@ button:active {
     font-family:'Redaction 35';
 }
 
+#resetBtn {
+    background-color: rgb(70, 11, 11);
+    font-family:'Redaction 35';
+}
+
+
+
 .info {
     font-family:'Redaction 35';
 }

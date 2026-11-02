@@ -1,8 +1,4 @@
-console.log("network.js loaded");
-
 class NeuralNetwork {
-    
-    /*gonna be honest i followed a guide for most of this, i understand how it works but code is adapted from flappy to snake*/
     constructor(inputSize = 64, hiddenSize = 64, outputSize = 4) {
         this.inputSize = inputSize;
         this.hiddenSize = hiddenSize;
@@ -60,5 +56,26 @@ class NeuralNetwork {
         this.biasH = this.biasH.map(change);
         this.weightsHO = this.weightsHO.map(row => row.map(change));
         this.biasO = this.biasO.map(change);
+    }
+
+    toJSON() {
+        return {
+            inputSize: this.inputSize,
+            hiddenSize: this.hiddenSize,
+            outputSize: this.outputSize,
+            weightsIH: this.weightsIH,
+            biasH: this.biasH,
+            weightsHO: this.weightsHO,
+            biasO: this.biasO
+        };
+    }
+
+    static fromJSON(data) {
+        const net = new NeuralNetwork(data.inputSize, data.hiddenSize, data.outputSize);
+        net.weightsIH = data.weightsIH;
+        net.biasH = data.biasH;
+        net.weightsHO = data.weightsHO;
+        net.biasO = data.biasO;
+        return net;
     }
 }
