@@ -6,21 +6,27 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <div id="modes">
+            <button id="trainModeBtn">Train AI</button>
+            <button id="playModeBtn">Play yourself</button>
+            <button id="watchModeBtn">Watch AI play</button>
+        </div>
+
         <canvas id="game" width="576" height="576"></canvas>
 
-        <div id="stats">
+        <p id="message"></p>
+
             <p class="info">Generation: <span id="generation">0</span></p>
             <p class="info">Best score: <span id="bestScore">0</span></p>
             <p class="info">Current score: <span id="currentScore">0</span></p>
-        </div>
 
-        <div id="controls">
-            <button id="startBtn" class="button">Start</button>
-            <button id="pauseBtn" class="button">Pause</button>
+            <p class="info">you: last <span id="youLast">-</span>, best <span id="youBest">0</span></p>
+            <p class="info">AI: last <span id="aiLast">-</span>, best <span id="aiBest">0</span></p>
+
+            <button id="startBtn">Start</button>
+            <button id="pauseBtn">Pause</button>
+            <input type="range" id="speed" min="1" max="100" value="8">
             <button id="resetBtn">Reset training</button>
-            
-            <input type="range" id="speed" class="dial" min="1" max="100" value="8">
-        </div>
 
         <script src="js/rewards.js"></script>
         <script src="js/game.js"></script>

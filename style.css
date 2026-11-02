@@ -64,11 +64,24 @@ button:active {
 }
 
 #resetBtn {
+    background-color: rgb(58, 7, 7);
+    font-family:'Redaction 35';
+}
+
+#trainModeBtn {
     background-color: rgb(70, 11, 11);
     font-family:'Redaction 35';
 }
 
+#playModeBtn {
+    background-color: rgb(70, 11, 11);
+    font-family:'Redaction 35';
+}
 
+#watchModeBtn {
+    background-color: rgb(70, 11, 11);
+    font-family:'Redaction 35';
+}
 
 .info {
     font-family:'Redaction 35';
