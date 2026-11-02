@@ -67,29 +67,29 @@ button:active {
 
 #pauseBtn {
     background-color: rgb(124, 22, 22);
-    font-family:'Redaction 35';
+    font-family:'Redaction 35', serif;
 }
 
 #resetBtn {
     background-color: rgb(58, 7, 7);
-    font-family:'Redaction 35';
+    font-family:'Redaction 35', serif;
 }
 
 #trainModeBtn {
     background-color: rgb(70, 11, 11);
-    font-family:'Redaction 35';
+    font-family:'Redaction 35', serif;
 }
 
 #playModeBtn {
     background-color: rgb(70, 11, 11);
-    font-family:'Redaction 35';
+    font-family:'Redaction 35', serif;
 }
 
 #watchModeBtn {
     background-color: rgb(70, 11, 11);
-    font-family:'Redaction 35';
+    font-family:'Redaction 35', serif;
 }
 
 .info {
-    font-family:'Redaction 35';
+    font-family:'Redaction 35', serif;
 }

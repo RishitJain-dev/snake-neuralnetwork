@@ -237,7 +237,7 @@ document.getElementById("pauseBtn").onclick = () => {
 };
 
 document.getElementById("resetBtn").onclick = () => {
-    if (!confirm("Delete all saved training and start again?")) return;
+    if (!confirm("delete everything?!?!?! this is a dev feature so dont know why you wanna do this but okay lol")) return;
     localStorage.removeItem(SAVE_KEY);
     localStorage.removeItem(BEST_SCORE_KEY);
     localStorage.removeItem(AI_BEST_KEY);

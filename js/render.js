@@ -50,6 +50,9 @@ function render(games) {
     });
 }
 
+/*THIS IS based opn a guide ai made, the code itself wasnt ai at all, but i couldnt find anything online on how to maek it so an ai made a cool guide on hiow to do it, and i followed it and adapted t to make it work with my project!*/
+
+
 const brainCanvas = document.getElementById("brain");
 const brainCtx = brainCanvas.getContext("2d");
 
