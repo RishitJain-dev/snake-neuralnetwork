@@ -1,5 +1,5 @@
-const snakeGame = new SnakeGame(GRID);
 const population = new Population(4, GRID * GRID);
+let games = [];
 
 const generationEl = document.getElementById("generation");
 const bestScoreEl = document.getElementById("bestScore");
@@ -8,39 +8,36 @@ const speedEl = document.getElementById("speed");
 
 let running = false;
 let bestScore = 0;
-let current = 0;
-let fitnesses = [];
+
+function startGeneration() {
+    games = population.brains.map(() => new SnakeGame(GRID));
+}
 
 function updateStats() {
-    generationEl.textContent = `${population.generation} (snake ${current + 1}/${population.size})`;
-    currentScoreEl.textContent = snakeGame.score;
+    const alive = games.filter(g => g.alive).length;
+    generationEl.textContent = `${population.generation} (${alive} alive)`;
+    currentScoreEl.textContent = games.map(g => g.score).join(" / ");
     bestScoreEl.textContent = bestScore;
 }
 
 function loop() {
     if (!running) return;
 
-    const brain = population.brains[current];
-    snakeGame.setDirection(brain.predict(snakeGame.getInputs()));
-    snakeGame.step();
+    games.forEach((game, i) => {
+        if (!game.alive) return;
+        game.setDirection(population.brains[i].predict(game.getInputs()));
+        game.step();
+        if (game.score > bestScore) bestScore = game.score;
+    });
 
-    if (snakeGame.score > bestScore) bestScore = snakeGame.score;
-
-    if (!snakeGame.alive) {
-        fitnesses.push(calculateFitness(snakeGame.stats));
-        current++;
-
-        if (current >= population.size) {
-            const best = population.evolve(fitnesses);
-            console.log(`Generation ${population.generation - 1} best fitness: ${best.toFixed(1)}`);
-            fitnesses = [];
-            current = 0;
-        }
-
-        snakeGame.reset();
+    if (games.every(g => !g.alive)) { /*not alive??!?!*/
+        const fitnesses = games.map(g => calculateFitness(g.stats));
+        const best = population.evolve(fitnesses);
+        console.log(`Generation ${population.generation - 1} best fitness: ${best.toFixed(1)}`);
+        startGeneration();
     }
 
-    render(snakeGame);
+    render(games);
     updateStats();
     setTimeout(loop, 1000 / speedEl.value);
 }
@@ -56,5 +53,6 @@ document.getElementById("pauseBtn").onclick = () => {
     running = false;
 };
 
-render(snakeGame);
+startGeneration();
+render(games);
 updateStats();
