@@ -50,6 +50,11 @@ class SnakeGame {
         return Math.abs(point.x - this.food.x) + Math.abs(point.y - this.food.y);
     }
 
+    isDanger(point) {
+        if (point.x < 0 || point.x >= this.size || point.y < 0 || point.y >= this.size) return true;
+        return this.snake.slice(0, -1).some(s => s.x === point.x && s.y === point.y);
+    }
+
     setDirection(d) {
         const next = DIRECTIONS[d];
         if (next.x === -this.direction.x && next.y === -this.direction.y) return;
@@ -105,6 +110,23 @@ class SnakeGame {
             inputs[s.y * this.size + s.x] = i === 0 ? 0.5 : -1;
         });
         inputs[this.food.y * this.size + this.food.x] = 1;
+
+        const head = this.snake[0];
+        const d = this.direction;
+        const ahead = { x: head.x + d.x, y: head.y + d.y };
+        const left = { x: head.x + d.y, y: head.y - d.x };
+        const right = { x: head.x - d.y, y: head.y + d.x };
+
+        inputs.push(
+            this.food.y < head.y ? 1 : 0,
+            this.food.y > head.y ? 1 : 0,
+            this.food.x < head.x ? 1 : 0,
+            this.food.x > head.x ? 1 : 0,
+            this.isDanger(ahead) ? 1 : 0,
+            this.isDanger(left) ? 1 : 0,
+            this.isDanger(right) ? 1 : 0
+        );
+
         return inputs;
     }
 }

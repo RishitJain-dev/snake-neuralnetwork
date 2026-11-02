@@ -1,8 +1,8 @@
 const REWARDS = {
     food: 100,
-    step: 1,
+    step: 0,
     closerToFood: 1,
-    furtherFromFood: -1.5,
+    furtherFromFood: -2,
     hitWall: -50,
     hitSelf: -50,
     starved: -50,
