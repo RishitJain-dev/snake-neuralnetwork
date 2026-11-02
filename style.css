@@ -5,10 +5,36 @@ body {
 canvas {
     background-color: #ffffff;
     
-    /* centre the canvas */
+    /* centre the canvas (used ai on this because its lowk harder than centring a div :cry)*/
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
+    
+}
+
+button {
+  appearance: none;         
+  -webkit-appearance: none; /*this entire button style is from css buttons on w3 schools*/
+  border: none;             
+  box-shadow: none;         
+  color: white;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font: inherit;             
+  cursor: pointer;
+}
+
+button:active {
+  border-style: none;
+  transform: none;
+}
+
+#startBtn {
+    background-color: rgb(182, 62, 41);
+}
+
+#pauseBtn {
+    background-color: rgb(124, 22, 22);
 }
