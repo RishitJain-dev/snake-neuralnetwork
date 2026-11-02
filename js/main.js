@@ -1,5 +1,5 @@
 const snakeGame = new SnakeGame(GRID);
-let brain = new NeuralNetwork(GRID * GRID, 64, 4);
+const population = new Population(4, GRID * GRID);
 
 const generationEl = document.getElementById("generation");
 const bestScoreEl = document.getElementById("bestScore");
@@ -8,30 +8,40 @@ const speedEl = document.getElementById("speed");
 
 let running = false;
 let bestScore = 0;
-let networkCount = 1;
+let current = 0;
+let fitnesses = [];
+
+function updateStats() {
+    generationEl.textContent = `${population.generation} (snake ${current + 1}/${population.size})`;
+    currentScoreEl.textContent = snakeGame.score;
+    bestScoreEl.textContent = bestScore;
+}
 
 function loop() {
     if (!running) return;
 
-    const move = brain.predict(snakeGame.getInputs());
-    snakeGame.setDirection(move);
+    const brain = population.brains[current];
+    snakeGame.setDirection(brain.predict(snakeGame.getInputs()));
     snakeGame.step();
 
+    if (snakeGame.score > bestScore) bestScore = snakeGame.score;
+
     if (!snakeGame.alive) {
+        fitnesses.push(calculateFitness(snakeGame.stats));
+        current++;
+
+        if (current >= population.size) {
+            const best = population.evolve(fitnesses);
+            console.log(`Generation ${population.generation - 1} best fitness: ${best.toFixed(1)}`);
+            fitnesses = [];
+            current = 0;
+        }
+
         snakeGame.reset();
-        brain = new NeuralNetwork(GRID * GRID, 64, 4);
-        networkCount++;
-        generationEl.textContent = networkCount;
     }
 
     render(snakeGame);
-
-    currentScoreEl.textContent = snakeGame.score;
-    if (snakeGame.score > bestScore) {
-        bestScore = snakeGame.score;
-        bestScoreEl.textContent = bestScore;
-    }
-
+    updateStats();
     setTimeout(loop, 1000 / speedEl.value);
 }
 
@@ -47,3 +57,4 @@ document.getElementById("pauseBtn").onclick = () => {
 };
 
 render(snakeGame);
+updateStats();

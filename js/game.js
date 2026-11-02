@@ -19,7 +19,17 @@ class SnakeGame {
         this.steps = 0;
         this.stepsSinceFood = 0;
         this.alive = true;
+        this.stats = Object.fromEntries(Object.keys(REWARDS).map(name => [name, 0]));
         this.placeFood();
+    }
+
+    reward(name) {
+        if (name in this.stats) this.stats[name]++;
+    }
+
+    die(reason) {
+        this.alive = false;
+        this.reward(reason);
     }
 
     placeFood() {
@@ -30,10 +40,14 @@ class SnakeGame {
             }
         }
         if (empty.length === 0) {
-            this.alive = false;
+            this.die("won");
             return;
         }
         this.food = empty[Math.floor(Math.random() * empty.length)];
+    }
+
+    distanceToFood(point) {
+        return Math.abs(point.x - this.food.x) + Math.abs(point.y - this.food.y);
     }
 
     setDirection(d) {
@@ -49,29 +63,40 @@ class SnakeGame {
         const newHead = { x: head.x + this.direction.x, y: head.y + this.direction.y };
 
         if (newHead.x < 0 || newHead.x >= this.size || newHead.y < 0 || newHead.y >= this.size) {
-            this.alive = false;
+            this.die("hitWall");
             return;
         }
 
         const body = this.snake.slice(0, -1);
         if (body.some(s => s.x === newHead.x && s.y === newHead.y)) {
-            this.alive = false;
+            this.die("hitSelf");
             return;
         }
 
+        this.steps++;
+        this.stepsSinceFood++;
+        this.reward("step");
+
+        const oldDistance = this.distanceToFood(head);
         this.snake.unshift(newHead);
 
         if (newHead.x === this.food.x && newHead.y === this.food.y) {
             this.score++;
             this.stepsSinceFood = 0;
+            this.reward("food");
             this.placeFood();
         } else {
             this.snake.pop();
+            if (this.distanceToFood(newHead) < oldDistance) {
+                this.reward("closerToFood");
+            } else {
+                this.reward("furtherFromFood");
+            }
         }
 
-        this.steps++;
-        this.stepsSinceFood++;
-        if (this.stepsSinceFood > this.maxStepsWithoutFood) this.alive = false;
+        if (this.alive && this.stepsSinceFood > this.maxStepsWithoutFood) {
+            this.die("starved");
+        }
     }
 
     getInputs() {
