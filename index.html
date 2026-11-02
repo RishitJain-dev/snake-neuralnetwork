@@ -14,19 +14,25 @@
 
         <canvas id="game" width="576" height="576"></canvas>
 
-        <p id="message"></p>
+        <p id="message" class="info"></p>
 
+        <div id="aiStats">
             <p class="info">Generation: <span id="generation">0</span></p>
             <p class="info">Best score: <span id="bestScore">0</span></p>
             <p class="info">Current score: <span id="currentScore">0</span></p>
+        </div>
 
-            <p class="info">you: last <span id="youLast">-</span>, best <span id="youBest">0</span></p>
+        <div id="compareStats">
+            <p class="info">You: last <span id="youLast">-</span>, best <span id="youBest">0</span></p>
             <p class="info">AI: last <span id="aiLast">-</span>, best <span id="aiBest">0</span></p>
+        </div>
 
+        <div id="aiControls">
             <button id="startBtn">Start</button>
             <button id="pauseBtn">Pause</button>
             <input type="range" id="speed" min="1" max="100" value="8">
             <button id="resetBtn">Reset training</button>
+        </div>
 
         <script src="js/rewards.js"></script>
         <script src="js/game.js"></script>

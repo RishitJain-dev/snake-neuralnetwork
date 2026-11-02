@@ -22,18 +22,15 @@
 
 body {
     background-color: rgb(241, 228, 220);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 20px;
 }
 
 canvas {
     background-color: #ffffff;
-    
-    /* centre the canvas (used ai on this because its lowk harder than centring a div :cry)*/
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    
 }
 
 button {
